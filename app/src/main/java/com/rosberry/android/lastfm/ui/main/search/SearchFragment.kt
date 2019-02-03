@@ -22,6 +22,7 @@ import org.koin.android.ext.android.getKoin
  * @author Alexei Korshun on 03/02/2019.
  */
 class SearchFragment : AppFragment(), SearchView {
+
     override val layoutRes: Int = R.layout.fragment_search
 
     @InjectPresenter
@@ -35,5 +36,20 @@ class SearchFragment : AppFragment(), SearchView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.searchImageView.setOnClickListener { presenter.clickSearch(searchEditText.text.toString()) }
+    }
+
+    override fun showEmpty() {
+    }
+
+    override fun showEmptySearch() {
+    }
+
+    override fun showLoading() {
+    }
+
+    override fun showResult() {
+    }
+
+    override fun showError() {
     }
 }
