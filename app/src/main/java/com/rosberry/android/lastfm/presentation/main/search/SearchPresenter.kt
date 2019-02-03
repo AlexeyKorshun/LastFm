@@ -7,12 +7,12 @@
 package com.rosberry.android.lastfm.presentation.main.search
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpView
 import com.rosberry.android.lastfm.base.presentation.AppPresenter
 
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
 @InjectViewState
-class SearchPresenter : AppPresenter<MvpView>() {
+class SearchPresenter : AppPresenter<SearchView>() {
+
 }
