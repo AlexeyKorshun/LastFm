@@ -9,6 +9,7 @@ package com.rosberry.android.lastfm.data
 import com.rosberry.android.lastfm.entity.Album
 import com.rosberry.android.lastfm.entity.Artist
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -22,12 +23,10 @@ class LastFmConverterFactory : Converter.Factory() {
     override fun responseBodyConverter(type: Type, annotations: Array<Annotation>,
                                        retrofit: Retrofit): Converter<ResponseBody, *>? {
         val typeString = type.toString()
-        return if (typeString == "java.util.List<com.rosberry.android.lastfm.entity.Artist>") {
-            ArtistsConverter()
-        } else if (typeString == "java.util.List<com.rosberry.android.lastfm.entity.Album>") {
-            AlbumConverter()
-        } else {
-            null
+        return when (typeString) {
+            "java.util.List<com.rosberry.android.lastfm.entity.Artist>" -> ArtistsConverter()
+            "java.util.List<com.rosberry.android.lastfm.entity.Album>" -> AlbumConverter()
+            else -> null
         }
     }
 
@@ -47,19 +46,11 @@ class LastFmConverterFactory : Converter.Factory() {
                         val jsonArtist = jsonArtistsList.getJSONObject(index)
 
                         val jsonImages = jsonArtist.getJSONArray("image")
-                        var image = ""
-                        for (imageIndex in 0 until jsonImages.length()) {
-                            val jsonImage = jsonImages.getJSONObject(imageIndex)
-                            if (jsonImage.optString("size") == "small") {
-                                image = jsonImage.optString("#text")
-                                break
-                            }
-                        }
 
                         result.add(Artist(
                                 jsonArtist.optString("mbid"),
                                 jsonArtist.optString("name"),
-                                image
+                                jsonImages.getImageFromArray()
                         ))
                     }
                     return result
@@ -73,6 +64,7 @@ class LastFmConverterFactory : Converter.Factory() {
     }
 
     class AlbumConverter : Converter<ResponseBody, List<Album>> {
+
         override fun convert(value: ResponseBody): List<Album>? {
             val jsonResponse = JSONObject(value.string())
             if (jsonResponse.has("topalbums")) {
@@ -84,19 +76,11 @@ class LastFmConverterFactory : Converter.Factory() {
                     for (index in 0 until jsonAlbums.length()) {
                         val jsonAlbum = jsonAlbums.getJSONObject(index)
                         val jsonImages = jsonAlbum.getJSONArray("image")
-                        var image = ""
-                        for (imageIndex in 0 until jsonImages.length()) {
-                            val jsonImage = jsonImages.getJSONObject(imageIndex)
-                            if (jsonImage.optString("size") == "small") {
-                                image = jsonImage.optString("#text")
-                                break
-                            }
-                        }
 
                         albums.add(Album(
                                 jsonAlbum.optString("mbid"),
                                 jsonAlbum.optString("name"),
-                                image
+                                jsonImages.getImageFromArray()
                         ))
                     }
 
@@ -108,6 +92,17 @@ class LastFmConverterFactory : Converter.Factory() {
                 return emptyList()
             }
         }
-
     }
+}
+
+private fun JSONArray.getImageFromArray(): String {
+    var image = ""
+    for (imageIndex in 0 until this.length()) {
+        val jsonImage = this.getJSONObject(imageIndex)
+        if (jsonImage.optString("size") == "small") {
+            image = jsonImage.optString("#text")
+            break
+        }
+    }
+    return image
 }
