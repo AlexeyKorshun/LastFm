@@ -9,6 +9,7 @@ package com.rosberry.android.lastfm.di
 import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.presentation.launch.LaunchPresenter
 import com.rosberry.android.lastfm.presentation.main.MainPresenter
+import com.rosberry.android.lastfm.presentation.main.search.SearchPresenter
 import org.koin.dsl.module.module
 import ru.terrakok.cicerone.Cicerone
 import ru.terrakok.cicerone.NavigatorHolder
@@ -31,6 +32,7 @@ val appModule = module {
 
     factory { LaunchPresenter(get(name = APP_CICERONE)) }
     factory { MainPresenter(get(name = MAIN_SCREEN_CICERONE)) }
+    factory { SearchPresenter(get(name = APP_CICERONE)) }
 }
 
 fun createRouter(cicerone: Cicerone<AppRouter>): AppRouter = cicerone.router
