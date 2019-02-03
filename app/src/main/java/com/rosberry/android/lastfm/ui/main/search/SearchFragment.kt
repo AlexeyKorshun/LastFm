@@ -50,9 +50,9 @@ class SearchFragment : AppFragment(), SearchView {
         view.searchImageView.setOnClickListener { presenter.clickSearch(searchEditText.text.toString()) }
         view.artistsList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         view.artistsList.adapter = adapter
-        view.searchEditText.setOnEditorActionListener { view, actionId, _ ->
+        view.searchEditText.setOnEditorActionListener { searchView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                presenter.clickSearch(view.text.toString())
+                presenter.clickSearch(searchView.text.toString())
                 return@setOnEditorActionListener true
             } else {
                 return@setOnEditorActionListener false
@@ -115,7 +115,7 @@ class SearchFragment : AppFragment(), SearchView {
         searchImageView.isEnabled = isEnable
     }
 
-    fun hideKeyboardFrom(context: Context, view: View) {
+    private fun hideKeyboardFrom(context: Context, view: View) {
         val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
