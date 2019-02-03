@@ -7,6 +7,8 @@
 package com.rosberry.android.lastfm
 
 import androidx.fragment.app.Fragment
+import com.rosberry.android.lastfm.entity.Artist
+import com.rosberry.android.lastfm.ui.albums.top.TopAlbumsFragment
 import com.rosberry.android.lastfm.ui.main.MainFragment
 import com.rosberry.android.lastfm.ui.main.favorites.FavoritesFragment
 import com.rosberry.android.lastfm.ui.main.search.SearchFragment
@@ -30,5 +32,10 @@ object Screens {
     class SearchScreen : SupportAppScreen() {
 
         override fun getFragment(): Fragment = SearchFragment()
+    }
+
+    class TopAlbumsScreen(private val artist: Artist) : SupportAppScreen() {
+
+        override fun getFragment(): Fragment = TopAlbumsFragment.newInstance(artist)
     }
 }
