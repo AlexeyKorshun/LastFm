@@ -86,6 +86,7 @@ class TopAlbumsFragment : AppFragment(), TopAlbumsView, ClickListener<Album> {
     }
 
     override fun showResult(items: List<TopAlbumItem>) {
+        adapter.update(items)
         progressBar.show(false)
         errorView.show(false)
         albumsList.show(true)
