@@ -20,7 +20,12 @@ class LastFmConverterFactory : Converter.Factory() {
 
     override fun responseBodyConverter(type: Type, annotations: Array<Annotation>,
                                        retrofit: Retrofit): Converter<ResponseBody, *>? {
-        return ArtistsConverter()
+        val typeString = type.toString()
+        return if (typeString == "java.util.List<com.rosberry.android.lastfm.entity.Artist>") {
+            ArtistsConverter()
+        } else {
+            null
+        }
     }
 
     class ArtistsConverter : Converter<ResponseBody, List<Artist>> {
@@ -29,6 +34,7 @@ class LastFmConverterFactory : Converter.Factory() {
             val result = mutableListOf<Artist>()
             val rawResponse = value.string()
             val jsonResponse = JSONObject(rawResponse)
+
             if (jsonResponse.has("results")) {
                 val jsonResults = jsonResponse.getJSONObject("results")
                 if (jsonResults.has("artistmatches")) {
