@@ -18,7 +18,7 @@ class SearchRepositoryImp(
         private val api: LastFmApi
 ) : SearchRepository {
 
-    override suspend fun searchArtists(query: String): Deferred<List<Artist>> {
+    override fun searchArtists(query: String): Deferred<List<Artist>> {
         return api.searchArtist(query)
     }
 }
