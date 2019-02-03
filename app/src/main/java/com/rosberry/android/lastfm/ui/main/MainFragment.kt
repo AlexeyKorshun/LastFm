@@ -32,7 +32,9 @@ class MainFragment : AppFragment(), MvpView, BottomNavigationView.OnNavigationIt
     override val layoutRes: Int = R.layout.fragment_main
 
     private val navigatorHolder: NavigatorHolder by inject(name = MAIN_SCREEN_CICERONE)
-    private val navigator: Navigator = SupportAppNavigator(this.activity, childFragmentManager, R.id.mainContainer)
+    private val navigator: Navigator by lazy {
+        SupportAppNavigator(this.activity, childFragmentManager, R.id.mainContainer)
+    }
 
     @InjectPresenter
     lateinit var presenter: MainPresenter
