@@ -14,6 +14,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rosberry.android.lastfm.R
+import com.rosberry.android.lastfm.base.router.AppNavigator
 import com.rosberry.android.lastfm.base.ui.AppFragment
 import com.rosberry.android.lastfm.di.MAIN_SCREEN_CICERONE
 import com.rosberry.android.lastfm.presentation.main.MainPresenter
@@ -22,7 +23,6 @@ import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
 
 /**
  * @author Alexei Korshun on 03/02/2019.
@@ -33,7 +33,7 @@ class MainFragment : AppFragment(), MvpView, BottomNavigationView.OnNavigationIt
 
     private val navigatorHolder: NavigatorHolder by inject(name = MAIN_SCREEN_CICERONE)
     private val navigator: Navigator by lazy {
-        SupportAppNavigator(this.activity, childFragmentManager, R.id.mainContainer)
+        AppNavigator(this.activity, childFragmentManager, R.id.mainContainer)
     }
 
     @InjectPresenter

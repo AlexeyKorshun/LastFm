@@ -6,6 +6,7 @@
 
 package com.rosberry.android.lastfm.di
 
+import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.presentation.launch.LaunchPresenter
 import com.rosberry.android.lastfm.presentation.main.MainPresenter
 import org.koin.dsl.module.module
@@ -20,11 +21,11 @@ const val MAIN_SCREEN_CICERONE = "bottom_navigation_cicerone"
  */
 val appModule = module {
 
-    single(name = APP_CICERONE) { Cicerone.create() }
+    single(name = APP_CICERONE) { Cicerone.create(AppRouter()) }
     single(name = APP_CICERONE) { createRouter(get(name = APP_CICERONE)) }
     single(name = APP_CICERONE) { createNavigatorHolder(get(name = APP_CICERONE)) }
 
-    single(name = MAIN_SCREEN_CICERONE) { Cicerone.create() }
+    single(name = MAIN_SCREEN_CICERONE) { Cicerone.create(AppRouter()) }
     single(name = MAIN_SCREEN_CICERONE) { createRouter(get(name = MAIN_SCREEN_CICERONE)) }
     single(name = MAIN_SCREEN_CICERONE) { createNavigatorHolder(get(name = MAIN_SCREEN_CICERONE)) }
 
@@ -32,7 +33,7 @@ val appModule = module {
     factory { MainPresenter(get(name = MAIN_SCREEN_CICERONE)) }
 }
 
-fun createRouter(cicerone: Cicerone<Router>): Router = cicerone.router
+fun createRouter(cicerone: Cicerone<AppRouter>): AppRouter = cicerone.router
 fun createNavigatorHolder(cicerone: Cicerone<Router>): NavigatorHolder = cicerone.navigatorHolder
 
 val lastFmModules = listOf(appModule)

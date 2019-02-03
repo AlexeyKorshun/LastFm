@@ -10,26 +10,26 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpView
 import com.rosberry.android.lastfm.Screens
 import com.rosberry.android.lastfm.base.presentation.AppPresenter
-import ru.terrakok.cicerone.Router
+import com.rosberry.android.lastfm.base.router.AppRouter
 
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
 @InjectViewState
 class MainPresenter(
-        private val router: Router
+        private val router: AppRouter
 ) : AppPresenter<MvpView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        router.newRootScreen(Screens.FavoritesScreen())
+        router.swapTo(Screens.FavoritesScreen())
     }
 
     fun clickSearch() {
-        router.newRootScreen(Screens.SearchScreen())
+        router.swapTo(Screens.SearchScreen())
     }
 
     fun clickFavorites() {
-        router.newRootScreen(Screens.FavoritesScreen())
+        router.swapTo(Screens.FavoritesScreen())
     }
 }

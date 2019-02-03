@@ -10,14 +10,14 @@ import com.arellomobile.mvp.InjectViewState
 import com.arellomobile.mvp.MvpPresenter
 import com.arellomobile.mvp.MvpView
 import com.rosberry.android.lastfm.Screens
-import ru.terrakok.cicerone.Router
+import com.rosberry.android.lastfm.base.router.AppRouter
 
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
 @InjectViewState
 class LaunchPresenter constructor(
-        private val router: Router
+        private val router: AppRouter
 ) : MvpPresenter<MvpView>() {
 
     override fun onFirstViewAttach() {
