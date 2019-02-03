@@ -22,7 +22,7 @@ class MainPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        router.swapTo(Screens.FavoritesScreen())
+        router.newRootScreen(Screens.FavoritesScreen())
     }
 
     fun clickSearch() {
