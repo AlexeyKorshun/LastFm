@@ -21,10 +21,11 @@ class ArtistViewHolder(
 
     override fun bind(item: ArtistItem) {
         super.bind(item)
-        Picasso.get()
-            .load(item.artist.image)
-            .into(itemView.imageView)
-
+        if (item.artist.image.isNotBlank()) {
+            Picasso.get()
+                .load(item.artist.image)
+                .into(itemView.imageView)
+        }
         itemView.nameView.text = item.artist.name
     }
 }

@@ -7,6 +7,7 @@
 package com.rosberry.android.lastfm.presentation.main.search
 
 import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
 import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
@@ -20,5 +21,8 @@ interface SearchView : MvpView {
     fun showEmptySearch()
     fun showLoading()
     fun showResult(items: List<ArtistItem>)
-    fun showError()
+    fun showError(message: String)
+
+    @StateStrategyType(AddToEndSingleStrategy::class)
+    fun enableSearch(isEnable: Boolean)
 }

@@ -7,6 +7,8 @@
 package com.rosberry.android.lastfm.ui.main.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +46,16 @@ class SearchFragment : AppFragment(), SearchView {
         view.searchImageView.setOnClickListener { presenter.clickSearch(searchEditText.text.toString()) }
         view.artistsList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         view.artistsList.adapter = adapter
+        view.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                presenter.queryChanged(s?.toString() ?: "")
+            }
+        })
+        presenter.queryChanged(view.searchEditText.text.toString())
     }
 
     override fun showEmpty() {
@@ -75,10 +87,17 @@ class SearchFragment : AppFragment(), SearchView {
         adapter.update(items)
     }
 
-    override fun showError() {
+    override fun showError(message: String) {
         emptySearchText.show(false)
         progressBar.show(false)
         errorView.show(true)
         artistsList.show(false)
+
+        errorView.text = message
+    }
+
+    override fun enableSearch(isEnable: Boolean) {
+        searchImageView.isClickable = isEnable
+        searchImageView.isEnabled = isEnable
     }
 }
