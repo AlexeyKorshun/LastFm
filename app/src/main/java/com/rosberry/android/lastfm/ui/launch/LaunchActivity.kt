@@ -38,7 +38,7 @@ class LaunchActivity : AppActivity(), MvpView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        startKoin(this.applicationContext, lastFmModules)
+        if (savedInstanceState == null) startKoin(this.applicationContext, lastFmModules)
         super.onCreate(savedInstanceState)
     }
 
