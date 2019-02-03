@@ -7,6 +7,7 @@
 package com.rosberry.android.lastfm.presentation.albums.top
 
 import com.arellomobile.mvp.InjectViewState
+import com.rosberry.android.lastfm.Screens
 import com.rosberry.android.lastfm.base.presentation.AppPresenter
 import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
@@ -30,7 +31,7 @@ class TopAlbumsPresenter(
     }
 
     fun click(item: Album) {
-
+        router.navigateTo(Screens.AlbumDetailScreen(artistName, item.name))
     }
 
     private fun loadAlbums() {
