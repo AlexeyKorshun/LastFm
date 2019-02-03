@@ -7,13 +7,13 @@
 package com.rosberry.android.lastfm.presentation.main.search
 
 import com.arellomobile.mvp.MvpView
-import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
+import com.arellomobile.mvp.viewstate.strategy.SingleStateStrategy
 import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
-@StateStrategyType(AddToEndSingleStrategy::class)
+@StateStrategyType(SingleStateStrategy::class)
 interface SearchView : MvpView {
 
     fun showEmpty()
