@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LastFm</string>
+    <string name="menu_favorites_albums">Favorites Albums</string>
+    <string name="menu_search">Search</string>
 </resources>
