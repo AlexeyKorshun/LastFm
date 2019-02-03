@@ -7,9 +7,11 @@
 package com.rosberry.android.lastfm.presentation.main.search
 
 import com.arellomobile.mvp.InjectViewState
+import com.rosberry.android.lastfm.Screens
 import com.rosberry.android.lastfm.base.presentation.AppPresenter
 import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.domain.search.SearchInteractor
+import com.rosberry.android.lastfm.entity.Artist
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -43,5 +45,9 @@ class SearchPresenter(
 
     fun queryChanged(query: String) {
         viewState.enableSearch(searchInteractor.isValidQuery(query))
+    }
+
+    fun clickItem(item: Artist) {
+        router.navigateTo(Screens.TopAlbumsScreen(item))
     }
 }

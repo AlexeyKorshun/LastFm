@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.rosberry.android.lastfm.R
+import com.rosberry.android.lastfm.base.recycler.ClickListener
 import com.rosberry.android.lastfm.base.show
 import com.rosberry.android.lastfm.base.ui.AppFragment
+import com.rosberry.android.lastfm.entity.Artist
 import com.rosberry.android.lastfm.presentation.main.search.ArtistItem
 import com.rosberry.android.lastfm.presentation.main.search.SearchPresenter
 import com.rosberry.android.lastfm.presentation.main.search.SearchView
@@ -31,7 +33,7 @@ import org.koin.android.ext.android.getKoin
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
-class SearchFragment : AppFragment(), SearchView {
+class SearchFragment : AppFragment(), SearchView, ClickListener<Artist> {
 
     override val layoutRes: Int = R.layout.fragment_search
 
@@ -43,7 +45,7 @@ class SearchFragment : AppFragment(), SearchView {
         return getKoin().get()
     }
 
-    private val adapter = ArtistAdapter(emptyList())
+    private val adapter = ArtistAdapter(emptyList(), this)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -113,6 +115,10 @@ class SearchFragment : AppFragment(), SearchView {
     override fun enableSearch(isEnable: Boolean) {
         searchImageView.isClickable = isEnable
         searchImageView.isEnabled = isEnable
+    }
+
+    override fun click(item: Artist) {
+        presenter.clickItem(item)
     }
 
     private fun hideKeyboardFrom(context: Context, view: View) {
