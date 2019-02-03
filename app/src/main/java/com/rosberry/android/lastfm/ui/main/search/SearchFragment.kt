@@ -6,10 +6,14 @@
 
 package com.rosberry.android.lastfm.ui.main.search
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -46,6 +50,14 @@ class SearchFragment : AppFragment(), SearchView {
         view.searchImageView.setOnClickListener { presenter.clickSearch(searchEditText.text.toString()) }
         view.artistsList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         view.artistsList.adapter = adapter
+        view.searchEditText.setOnEditorActionListener { view, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                presenter.clickSearch(view.text.toString())
+                return@setOnEditorActionListener true
+            } else {
+                return@setOnEditorActionListener false
+            }
+        }
         view.searchEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
 
@@ -73,6 +85,8 @@ class SearchFragment : AppFragment(), SearchView {
     }
 
     override fun showLoading() {
+        hideKeyboardFrom(requireContext(), searchEditText)
+        searchEditText.clearFocus()
         emptySearchText.show(false)
         progressBar.show(true)
         errorView.show(false)
@@ -99,5 +113,10 @@ class SearchFragment : AppFragment(), SearchView {
     override fun enableSearch(isEnable: Boolean) {
         searchImageView.isClickable = isEnable
         searchImageView.isEnabled = isEnable
+    }
+
+    fun hideKeyboardFrom(context: Context, view: View) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
