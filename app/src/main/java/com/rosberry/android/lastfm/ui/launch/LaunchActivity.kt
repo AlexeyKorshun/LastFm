@@ -19,6 +19,7 @@ import com.rosberry.android.lastfm.presentation.launch.LaunchPresenter
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
+import org.koin.standalone.StandAloneContext.stopKoin
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 
@@ -40,6 +41,11 @@ class LaunchActivity : AppActivity(), MvpView {
     override fun onCreate(savedInstanceState: Bundle?) {
         if (savedInstanceState == null) startKoin(this.applicationContext, lastFmModules)
         super.onCreate(savedInstanceState)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (isFinishing) stopKoin()
     }
 
 }
