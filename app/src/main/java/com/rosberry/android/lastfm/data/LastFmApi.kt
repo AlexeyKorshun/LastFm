@@ -18,4 +18,7 @@ interface LastFmApi {
 
     @GET("2.0/?method=artist.search&api_key=d5f514d16d94cf3435e4a1d9b2b1872d&format=json")
     fun searchArtist(@Query("artist") query: String): Deferred<List<Artist>>
+
+    @GET("2.0/?method=artist.gettopalbums&api_key=d5f514d16d94cf3435e4a1d9b2b1872d&format=json")
+    fun getTopAlbums(@Query("artist") query: String): Deferred<List<Artist>>
 }
