@@ -4,4 +4,5 @@
     <string name="menu_search">Search</string>
     <string name="search">Search</string>
     <string name="artist_not_found">Artist not found</string>
+    <string name="artist_image">Artist Image</string>
 </resources>

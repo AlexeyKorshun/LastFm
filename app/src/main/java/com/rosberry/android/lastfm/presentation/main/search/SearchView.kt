@@ -19,6 +19,6 @@ interface SearchView : MvpView {
     fun showEmpty()
     fun showEmptySearch()
     fun showLoading()
-    fun showResult()
+    fun showResult(items: List<ArtistItem>)
     fun showError()
 }
