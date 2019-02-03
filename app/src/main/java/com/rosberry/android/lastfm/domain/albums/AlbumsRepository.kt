@@ -16,5 +16,5 @@ interface AlbumsRepository {
 
     fun getTopAlbums(artistName: String) : Deferred<List<Album>>
 
-    fun getLocalAlbums() : Deferred<List<Album>>
+    suspend fun getLocalAlbums() : List<Album>
 }

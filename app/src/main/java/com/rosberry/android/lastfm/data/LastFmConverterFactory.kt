@@ -4,8 +4,9 @@
  *
  */
 
-package com.rosberry.android.lastfm.data.search
+package com.rosberry.android.lastfm.data
 
+import com.rosberry.android.lastfm.entity.Album
 import com.rosberry.android.lastfm.entity.Artist
 import okhttp3.ResponseBody
 import org.json.JSONObject
@@ -23,6 +24,8 @@ class LastFmConverterFactory : Converter.Factory() {
         val typeString = type.toString()
         return if (typeString == "java.util.List<com.rosberry.android.lastfm.entity.Artist>") {
             ArtistsConverter()
+        } else if (typeString == "java.util.List<com.rosberry.android.lastfm.entity.Album>") {
+            AlbumConverter()
         } else {
             null
         }
@@ -65,6 +68,44 @@ class LastFmConverterFactory : Converter.Factory() {
                 }
             } else {
                 return result
+            }
+        }
+    }
+
+    class AlbumConverter : Converter<ResponseBody, List<Album>> {
+        override fun convert(value: ResponseBody): List<Album>? {
+            val jsonResponse = JSONObject(value.string())
+            if (jsonResponse.has("topalbums")) {
+                val jsonTopAlbums = jsonResponse.getJSONObject("topalbums")
+                if (jsonTopAlbums.has("album")) {
+                    val jsonAlbums = jsonTopAlbums.getJSONArray("album")
+                    val albums = mutableListOf<Album>()
+
+                    for (index in 0 until jsonAlbums.length()) {
+                        val jsonAlbum = jsonAlbums.getJSONObject(index)
+                        val jsonImages = jsonAlbum.getJSONArray("image")
+                        var image = ""
+                        for (imageIndex in 0 until jsonImages.length()) {
+                            val jsonImage = jsonImages.getJSONObject(imageIndex)
+                            if (jsonImage.optString("size") == "small") {
+                                image = jsonImage.optString("#text")
+                                break
+                            }
+                        }
+
+                        albums.add(Album(
+                                jsonAlbum.optString("mbid"),
+                                jsonAlbum.optString("name"),
+                                image
+                        ))
+                    }
+
+                    return albums
+                } else {
+                    return emptyList()
+                }
+            } else {
+                return emptyList()
             }
         }
 

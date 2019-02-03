@@ -9,9 +9,11 @@ package com.rosberry.android.lastfm.di
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.data.LastFmApi
-import com.rosberry.android.lastfm.data.search.LastFmConverterFactory
+import com.rosberry.android.lastfm.data.LastFmConverterFactory
+import com.rosberry.android.lastfm.data.albums.AlbumsRepositoryImpl
 import com.rosberry.android.lastfm.data.search.SearchRepositoryImp
 import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
+import com.rosberry.android.lastfm.domain.albums.AlbumsRepository
 import com.rosberry.android.lastfm.domain.search.SearchInteractor
 import com.rosberry.android.lastfm.domain.search.SearchRepository
 import com.rosberry.android.lastfm.presentation.albums.top.TopAlbumsPresenter
@@ -47,10 +49,11 @@ val appModule = module {
 
     single { createRetrofit() }
     single { createApi(get()) }
-    factory { SearchRepositoryImp(get()) } bind(SearchRepository::class)
+    factory { SearchRepositoryImp(get()) } bind (SearchRepository::class)
+    factory { AlbumsRepositoryImpl(get()) } bind (AlbumsRepository::class)
 
     factory { SearchInteractor(get()) }
-    factory { AlbumsInteractor() }
+    factory { AlbumsInteractor(get()) }
 
     factory { LaunchPresenter(get(name = APP_CICERONE)) }
     factory { MainPresenter(get(name = MAIN_SCREEN_CICERONE)) }
