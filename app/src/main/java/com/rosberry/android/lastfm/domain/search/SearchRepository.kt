@@ -14,5 +14,5 @@ import kotlinx.coroutines.Deferred
  */
 interface SearchRepository {
 
-    suspend fun searchArtists(query: String): Deferred<List<Artist>>
+    fun searchArtists(query: String): Deferred<List<Artist>>
 }

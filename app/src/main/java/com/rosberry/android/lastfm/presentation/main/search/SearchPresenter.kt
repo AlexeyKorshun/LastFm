@@ -27,7 +27,7 @@ class SearchPresenter(
             viewState.showLoading()
             try {
                 val artists = withContext(bgScope.coroutineContext) {
-                    searchInteractor.search(query)
+                    searchInteractor.searchArtists(query)
                         .await()
                 }
                 val itemsList = artists.asSequence()

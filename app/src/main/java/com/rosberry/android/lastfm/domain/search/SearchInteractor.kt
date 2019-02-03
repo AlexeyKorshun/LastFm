@@ -18,5 +18,5 @@ class SearchInteractor(
 
     fun isValidQuery(query: String): Boolean = query.isNotBlank()
 
-    suspend fun search(query: String): Deferred<List<Artist>> = searchRepository.searchArtists(query)
+    fun searchArtists(query: String): Deferred<List<Artist>> = searchRepository.searchArtists(query)
 }
