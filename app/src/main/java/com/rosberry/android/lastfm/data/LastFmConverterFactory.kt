@@ -8,6 +8,8 @@ package com.rosberry.android.lastfm.data
 
 import com.rosberry.android.lastfm.entity.Album
 import com.rosberry.android.lastfm.entity.Artist
+import com.rosberry.android.lastfm.entity.DetailAlbum
+import com.rosberry.android.lastfm.entity.Track
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -26,6 +28,7 @@ class LastFmConverterFactory : Converter.Factory() {
         return when (typeString) {
             "java.util.List<com.rosberry.android.lastfm.entity.Artist>" -> ArtistsConverter()
             "java.util.List<com.rosberry.android.lastfm.entity.Album>" -> AlbumConverter()
+            "class com.rosberry.android.lastfm.entity.DetailAlbum" -> AlbumDetailConverter()
             else -> null
         }
     }
@@ -53,13 +56,9 @@ class LastFmConverterFactory : Converter.Factory() {
                                 jsonImages.getImageFromArray()
                         ))
                     }
-                    return result
-                } else {
-                    return result
                 }
-            } else {
-                return result
             }
+            return result
         }
     }
 
@@ -67,31 +66,49 @@ class LastFmConverterFactory : Converter.Factory() {
 
         override fun convert(value: ResponseBody): List<Album>? {
             val jsonResponse = JSONObject(value.string())
+            val result = mutableListOf<Album>()
             if (jsonResponse.has("topalbums")) {
                 val jsonTopAlbums = jsonResponse.getJSONObject("topalbums")
                 if (jsonTopAlbums.has("album")) {
                     val jsonAlbums = jsonTopAlbums.getJSONArray("album")
-                    val albums = mutableListOf<Album>()
 
                     for (index in 0 until jsonAlbums.length()) {
                         val jsonAlbum = jsonAlbums.getJSONObject(index)
                         val jsonImages = jsonAlbum.getJSONArray("image")
 
-                        albums.add(Album(
+                        result.add(Album(
                                 jsonAlbum.optString("mbid"),
                                 jsonAlbum.optString("name"),
                                 jsonImages.getImageFromArray()
                         ))
                     }
-
-                    return albums
-                } else {
-                    return emptyList()
                 }
-            } else {
-                return emptyList()
             }
+            return result
         }
+    }
+
+    class AlbumDetailConverter : Converter<ResponseBody, DetailAlbum> {
+
+        override fun convert(value: ResponseBody): DetailAlbum? {
+            val jsonResponse = JSONObject(value.string())
+            var result: DetailAlbum? = null
+            if (jsonResponse.has("album")) {
+                val jsonAlbum = jsonResponse.getJSONObject("album")
+                val jsonImages = jsonAlbum.getJSONArray("image")
+                val jsonTracks = jsonAlbum.getJSONObject("tracks")
+                    .getJSONArray("track")
+                result = DetailAlbum(
+                        jsonAlbum.optString("name"),
+                        jsonAlbum.optString("artist"),
+                        jsonImages.getImageFromArray(),
+                        jsonTracks.getTracksFromArray()
+                )
+
+            }
+            return result
+        }
+
     }
 }
 
@@ -105,4 +122,14 @@ private fun JSONArray.getImageFromArray(): String {
         }
     }
     return image
+}
+
+private fun JSONArray.getTracksFromArray(): List<Track> {
+    val result = mutableListOf<Track>()
+    for (index in 0 until this.length()) {
+        result.add(
+                Track(this.getJSONObject(index).optString("name"))
+        )
+    }
+    return result
 }

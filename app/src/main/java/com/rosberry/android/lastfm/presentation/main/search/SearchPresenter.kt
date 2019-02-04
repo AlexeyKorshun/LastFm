@@ -13,7 +13,6 @@ import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.domain.search.SearchInteractor
 import com.rosberry.android.lastfm.entity.Artist
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author Alexei Korshun on 03/02/2019.
@@ -28,14 +27,9 @@ class SearchPresenter(
         uiScope.launch {
             viewState.showLoading()
             try {
-                val artists = withContext(bgScope.coroutineContext) {
-                    searchInteractor.searchArtists(query)
-                        .await()
-                }
-                val itemsList = artists.asSequence()
-                    .map { ArtistItem(it) }
-                    .toList()
-                viewState.showResult(itemsList)
+                val artists = searchInteractor.searchArtists(query)
+                    .await()
+                viewState.showResult(artists.converToItems())
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewState.showError(e.localizedMessage)
@@ -50,4 +44,10 @@ class SearchPresenter(
     fun clickItem(item: Artist) {
         router.navigateTo(Screens.TopAlbumsScreen(item))
     }
+}
+
+private fun List<Artist>.converToItems(): List<ArtistItem> {
+    return this.asSequence()
+        .map { ArtistItem(it) }
+        .toList()
 }

@@ -19,10 +19,9 @@ open class AppPresenter<V : MvpView> : MvpPresenter<V>() {
 
     protected val job = SupervisorJob()
     protected val uiScope = CoroutineScope(Dispatchers.Main + job)
-    protected val bgScope = CoroutineScope(Dispatchers.IO + job)
 
     override fun onDestroy() {
-        super.onDestroy()
         job.cancel()
+        super.onDestroy()
     }
 }

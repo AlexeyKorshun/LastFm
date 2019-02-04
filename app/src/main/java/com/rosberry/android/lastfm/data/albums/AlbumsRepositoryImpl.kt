@@ -10,8 +10,6 @@ import com.rosberry.android.lastfm.data.LastFmApi
 import com.rosberry.android.lastfm.domain.albums.AlbumsRepository
 import com.rosberry.android.lastfm.entity.Album
 import com.rosberry.android.lastfm.entity.DetailAlbum
-import com.rosberry.android.lastfm.entity.Track
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 
 /**
@@ -30,22 +28,6 @@ class AlbumsRepositoryImpl(
     }
 
     override fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum> {
-        val deff = CompletableDeferred<DetailAlbum>()
-        deff.complete(
-                DetailAlbum(
-                        "Album",
-                        "artist",
-                        "",
-                        listOf(
-                                Track("first"),
-                                Track("first"),
-                                Track("first"),
-                                Track("first"),
-                                Track("first"),
-                                Track("first")
-                        )
-                )
-        )
-        return deff
+        return api.getAlbumDetails(artistName, albumName)
     }
 }

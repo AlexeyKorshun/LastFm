@@ -13,7 +13,6 @@ import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
 import com.rosberry.android.lastfm.entity.Album
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author Alexei Korshun on 03/02/2019.
@@ -36,20 +35,21 @@ class TopAlbumsPresenter(
 
     private fun loadAlbums() {
         uiScope.launch {
+            viewState.showLoading()
             try {
-                viewState.showLoading()
-                val albums = withContext(bgScope.coroutineContext) {
-                    albumsInteractor.getTopAlbums(artistName)
-                }.await()
-
-                val albumsItems = albums.asSequence()
-                    .map { TopAlbumItem(it) }
-                    .toList()
-                viewState.showResult(albumsItems)
+                val albums = albumsInteractor.getTopAlbums(artistName)
+                    .await()
+                viewState.showResult(albums.convertToItems())
             } catch (e: Exception) {
                 e.printStackTrace()
                 viewState.showError(e.localizedMessage)
             }
         }
     }
+}
+
+private fun List<Album>.convertToItems(): List<TopAlbumItem> {
+    return this.asSequence()
+        .map { TopAlbumItem(it) }
+        .toList()
 }

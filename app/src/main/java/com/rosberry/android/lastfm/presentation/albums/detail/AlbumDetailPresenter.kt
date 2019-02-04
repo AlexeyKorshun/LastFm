@@ -11,7 +11,6 @@ import com.rosberry.android.lastfm.base.presentation.AppPresenter
 import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
 import com.rosberry.android.lastfm.entity.Track
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * @author Alexei Korshun on 03/02/2019.
@@ -25,20 +24,19 @@ class AlbumDetailPresenter(
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        try {
-            uiScope.launch {
-                viewState.showLoading()
-                val album = withContext(bgScope.coroutineContext) {
-                    albumsInteractor.getDetailAlbum(albumName, artistName)
-                }.await()
+        uiScope.launch {
+            viewState.showLoading()
+            try {
+                val album = albumsInteractor.getDetailAlbum(albumName, artistName)
+                    .await()
                 viewState.showCover(album.cover)
                 viewState.showAlbumName(album.name)
                 viewState.showArtistName(album.artistName)
                 viewState.showTracks(album.tracks.convertToTrackItem())
+            } catch (e: Exception) {
+                e.printStackTrace()
+                viewState.showError(e.localizedMessage)
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            viewState.showError(e.localizedMessage)
         }
     }
 }
