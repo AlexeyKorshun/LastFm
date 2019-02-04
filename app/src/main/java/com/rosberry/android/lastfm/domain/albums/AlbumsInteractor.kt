@@ -7,6 +7,7 @@
 package com.rosberry.android.lastfm.domain.albums
 
 import com.rosberry.android.lastfm.entity.Album
+import com.rosberry.android.lastfm.entity.DetailAlbum
 import kotlinx.coroutines.Deferred
 
 /**
@@ -18,5 +19,9 @@ class AlbumsInteractor(
 
     fun getTopAlbums(artistName: String): Deferred<List<Album>> {
         return albumsRepository.getTopAlbums(artistName)
+    }
+
+    fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum> {
+        return albumsRepository.getDetailAlbum(albumName, artistName)
     }
 }

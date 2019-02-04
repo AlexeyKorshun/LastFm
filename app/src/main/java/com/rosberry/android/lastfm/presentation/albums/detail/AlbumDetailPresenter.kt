@@ -7,25 +7,44 @@
 package com.rosberry.android.lastfm.presentation.albums.detail
 
 import com.arellomobile.mvp.InjectViewState
-import com.arellomobile.mvp.MvpPresenter
+import com.rosberry.android.lastfm.base.presentation.AppPresenter
+import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
 import com.rosberry.android.lastfm.entity.Track
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
 @InjectViewState
-class AlbumDetailPresenter : MvpPresenter<AlbumDetailView>() {
+class AlbumDetailPresenter(
+        private val albumsInteractor: AlbumsInteractor,
+        private val albumName: String,
+        private val artistName: String
+) : AppPresenter<AlbumDetailView>() {
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
-        viewState.showAlbumName("Album")
-        viewState.showArtistName("Artist")
-        viewState.showTracks(
-                listOf(
-                        TrackItem(Track("first")),
-                        TrackItem(Track("second")),
-                        TrackItem(Track("third"))
-                )
-        )
+        try {
+            uiScope.launch {
+                viewState.showLoading()
+                val album = withContext(bgScope.coroutineContext) {
+                    albumsInteractor.getDetailAlbum(albumName, artistName)
+                }.await()
+                viewState.showCover(album.cover)
+                viewState.showAlbumName(album.name)
+                viewState.showArtistName(album.artistName)
+                viewState.showTracks(album.tracks.convertToTrackItem())
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            viewState.showError(e.localizedMessage)
+        }
     }
+}
+
+private fun List<Track>.convertToTrackItem(): List<TrackItem> {
+    return this.asSequence()
+        .map { TrackItem(it) }
+        .toList()
 }

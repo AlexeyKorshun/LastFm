@@ -34,6 +34,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/albumName" />
 
+    <TextView android:id="@+id/tracksTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/tracks"
+        app:layout_constraintTop_toBottomOf="@id/artistName" />
+
+
     <androidx.recyclerview.widget.RecyclerView android:id="@+id/trackList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -41,7 +51,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintTop_toBottomOf="@id/tracksTitle" />
 
     <TextView android:id="@+id/errorView"
         android:layout_width="wrap_content"

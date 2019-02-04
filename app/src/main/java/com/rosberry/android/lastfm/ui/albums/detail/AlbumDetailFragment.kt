@@ -6,20 +6,26 @@
 
 package com.rosberry.android.lastfm.ui.albums.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.rosberry.android.lastfm.R
 import com.rosberry.android.lastfm.base.show
 import com.rosberry.android.lastfm.base.ui.AppFragment
+import com.rosberry.android.lastfm.di.PROP_ALBUM_NAME
+import com.rosberry.android.lastfm.di.PROP_ARTIST_NAME
 import com.rosberry.android.lastfm.presentation.albums.detail.AlbumDetailPresenter
 import com.rosberry.android.lastfm.presentation.albums.detail.AlbumDetailView
 import com.rosberry.android.lastfm.presentation.albums.detail.TrackItem
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_album_detail.*
 import kotlinx.android.synthetic.main.fragment_album_detail.view.*
+import org.koin.android.ext.android.getKoin
+import org.koin.android.ext.android.setProperty
 
 /**
  * @author Alexei Korshun on 03/02/2019.
@@ -46,7 +52,18 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
     @InjectPresenter
     lateinit var presenter: AlbumDetailPresenter
 
+    @ProvidePresenter
+    fun providePresenter(): AlbumDetailPresenter {
+        return getKoin().get()
+    }
+
     private val adapter = TrackAdapter(emptyList())
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        setProperty(PROP_ARTIST_NAME, arguments?.getString(BUNDLE_ARTIST_NAME) ?: "")
+        setProperty(PROP_ALBUM_NAME, arguments?.getString(BUNDLE_ALBUM_NAME) ?: "")
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,6 +78,7 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         trackList.show(false)
         progressBar.show(true)
         errorView.show(false)
+        tracksTitle.show(false)
     }
 
     override fun showError(message: String) {
@@ -71,6 +89,7 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         trackList.show(false)
         progressBar.show(false)
         errorView.show(true)
+        tracksTitle.show(false)
     }
 
     override fun showTracks(tracks: List<TrackItem>) {
@@ -78,6 +97,7 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         trackList.show(true)
         progressBar.show(false)
         errorView.show(false)
+        tracksTitle.show(true)
     }
 
     override fun showAlbumName(name: String) {

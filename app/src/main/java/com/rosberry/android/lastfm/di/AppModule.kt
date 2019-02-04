@@ -16,6 +16,7 @@ import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
 import com.rosberry.android.lastfm.domain.albums.AlbumsRepository
 import com.rosberry.android.lastfm.domain.search.SearchInteractor
 import com.rosberry.android.lastfm.domain.search.SearchRepository
+import com.rosberry.android.lastfm.presentation.albums.detail.AlbumDetailPresenter
 import com.rosberry.android.lastfm.presentation.albums.top.TopAlbumsPresenter
 import com.rosberry.android.lastfm.presentation.launch.LaunchPresenter
 import com.rosberry.android.lastfm.presentation.main.MainPresenter
@@ -33,7 +34,7 @@ const val APP_CICERONE = "app_cicerone"
 const val MAIN_SCREEN_CICERONE = "bottom_navigation_cicerone"
 
 const val PROP_ARTIST_NAME = "prop_artist_name"
-const val PROP_ARTIST_ID = "prop_artist_id"
+const val PROP_ALBUM_NAME = "prop_album_name"
 
 private const val BASE_URL = "http://ws.audioscrobbler.com"
 
@@ -59,6 +60,7 @@ val appModule = module {
     factory { MainPresenter(get(name = MAIN_SCREEN_CICERONE)) }
     factory { SearchPresenter(get(name = APP_CICERONE), get()) }
     factory { TopAlbumsPresenter(get(name = APP_CICERONE), get(), getProperty(PROP_ARTIST_NAME)) }
+    factory { AlbumDetailPresenter(get(), getProperty(PROP_ALBUM_NAME), getProperty(PROP_ARTIST_NAME)) }
 }
 
 fun createRouter(cicerone: Cicerone<AppRouter>): AppRouter = cicerone.router
