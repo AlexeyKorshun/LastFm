@@ -30,5 +30,6 @@ class TopAlbumViewHolder(
                 .into(itemView.imageView)
         }
         itemView.nameView.text = item.album.name
+        itemView.setOnClickListener { clickListener.click(item.album) }
     }
 }
