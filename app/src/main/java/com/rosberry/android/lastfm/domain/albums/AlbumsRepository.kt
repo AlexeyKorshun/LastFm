@@ -19,5 +19,11 @@ interface AlbumsRepository {
 
     fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum>
 
-    suspend fun getLocalAlbums(): List<Album>
+    fun getFavoritesAlbum(): Deferred<List<DetailAlbum>>
+
+    fun isFavoriteAlbum(artistName: String, albumName: String): Deferred<Boolean>
+
+    fun addAlbumToFavorites(album: DetailAlbum)
+
+    fun removeAlbumFromFavorites(album: DetailAlbum)
 }

@@ -20,6 +20,7 @@ import com.rosberry.android.lastfm.presentation.albums.detail.AlbumDetailPresent
 import com.rosberry.android.lastfm.presentation.albums.top.TopAlbumsPresenter
 import com.rosberry.android.lastfm.presentation.launch.LaunchPresenter
 import com.rosberry.android.lastfm.presentation.main.MainPresenter
+import com.rosberry.android.lastfm.presentation.main.favorites.FavoritesPresenter
 import com.rosberry.android.lastfm.presentation.main.search.SearchPresenter
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
@@ -61,6 +62,7 @@ val appModule = module {
     factory { SearchPresenter(get(name = APP_CICERONE), get()) }
     factory { TopAlbumsPresenter(get(name = APP_CICERONE), get(), getProperty(PROP_ARTIST_NAME)) }
     factory { AlbumDetailPresenter(get(), getProperty(PROP_ALBUM_NAME), getProperty(PROP_ARTIST_NAME)) }
+    factory { FavoritesPresenter(get(name = APP_CICERONE), get()) }
 }
 
 fun createRouter(cicerone: Cicerone<AppRouter>): AppRouter = cicerone.router

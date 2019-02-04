@@ -24,4 +24,8 @@ class AlbumsInteractor(
     fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum> {
         return albumsRepository.getDetailAlbum(albumName, artistName)
     }
+
+    fun getFavoritesAlbums() : Deferred<List<DetailAlbum>> {
+        return albumsRepository.getFavoritesAlbum()
+    }
 }
