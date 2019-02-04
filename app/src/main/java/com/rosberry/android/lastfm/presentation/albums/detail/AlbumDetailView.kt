@@ -7,10 +7,13 @@
 package com.rosberry.android.lastfm.presentation.albums.detail
 
 import com.arellomobile.mvp.MvpView
+import com.arellomobile.mvp.viewstate.strategy.AddToEndSingleStrategy
+import com.arellomobile.mvp.viewstate.strategy.StateStrategyType
 
 /**
  * @author Alexei Korshun on 03/02/2019.
  */
+@StateStrategyType(AddToEndSingleStrategy::class)
 interface AlbumDetailView : MvpView {
 
     fun showLoading()
@@ -19,4 +22,5 @@ interface AlbumDetailView : MvpView {
     fun showAlbumName(name: String)
     fun showArtistName(name: String)
     fun showCover(url: String)
+    fun showIsFavorite(isFavorite: Boolean)
 }

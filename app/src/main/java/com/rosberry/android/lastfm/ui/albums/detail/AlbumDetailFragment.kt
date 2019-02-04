@@ -69,6 +69,7 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         super.onViewCreated(view, savedInstanceState)
         view.trackList.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         view.trackList.adapter = adapter
+        view.favoritesButton.setOnClickListener { presenter.clickFavorite() }
     }
 
     override fun showLoading() {
@@ -79,6 +80,7 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         progressBar.show(true)
         errorView.show(false)
         tracksTitle.show(false)
+        favoritesButton.show(false)
     }
 
     override fun showError(message: String) {
@@ -90,6 +92,7 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         progressBar.show(false)
         errorView.show(true)
         tracksTitle.show(false)
+        favoritesButton.show(false)
     }
 
     override fun showTracks(tracks: List<TrackItem>) {
@@ -123,6 +126,12 @@ class AlbumDetailFragment : AppFragment(), AlbumDetailView {
         imageView.show(true)
         progressBar.show(false)
         errorView.show(false)
+        favoritesButton.show(true)
     }
 
+    override fun showIsFavorite(isFavorite: Boolean) {
+        val res = if (isFavorite) R.drawable.ic_favorite_white_24dp
+        else R.drawable.ic_favorite_border_white_24dp
+        favoritesButton.setImageResource(res)
+    }
 }

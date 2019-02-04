@@ -23,8 +23,8 @@ class FavoritesPresenter(
         private val albumsInteractor: AlbumsInteractor
 ) : AppPresenter<FavoritesView>() {
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
+    override fun attachView(view: FavoritesView?) {
+        super.attachView(view)
         uiScope.launch {
             try {
                 val albums = albumsInteractor.getFavoritesAlbums()

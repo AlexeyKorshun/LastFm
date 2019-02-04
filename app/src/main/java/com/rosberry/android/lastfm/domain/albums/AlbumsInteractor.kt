@@ -28,4 +28,16 @@ class AlbumsInteractor(
     fun getFavoritesAlbums() : Deferred<List<DetailAlbum>> {
         return albumsRepository.getFavoritesAlbum()
     }
+
+    fun isFavoriteAlbum(artistName: String, albumName: String): Deferred<Boolean> {
+        return albumsRepository.isFavoriteAlbum(artistName, albumName)
+    }
+
+    fun addAlbumToFavorites(album: DetailAlbum) {
+        albumsRepository.addAlbumToFavorites(album)
+    }
+
+    fun removeAlbumFromFavorites(album: DetailAlbum) {
+        albumsRepository.removeAlbumFromFavorites(album)
+    }
 }

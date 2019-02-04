@@ -11,6 +11,7 @@ import com.rosberry.android.lastfm.base.router.AppRouter
 import com.rosberry.android.lastfm.data.LastFmApi
 import com.rosberry.android.lastfm.data.LastFmConverterFactory
 import com.rosberry.android.lastfm.data.albums.AlbumsRepositoryImpl
+import com.rosberry.android.lastfm.data.albums.LocalManager
 import com.rosberry.android.lastfm.data.search.SearchRepositoryImp
 import com.rosberry.android.lastfm.domain.albums.AlbumsInteractor
 import com.rosberry.android.lastfm.domain.albums.AlbumsRepository
@@ -51,8 +52,9 @@ val appModule = module {
 
     single { createRetrofit() }
     single { createApi(get()) }
+    single { LocalManager(get()) }
+    single { AlbumsRepositoryImpl(get(), get()) } bind (AlbumsRepository::class)
     factory { SearchRepositoryImp(get()) } bind (SearchRepository::class)
-    factory { AlbumsRepositoryImpl(get()) } bind (AlbumsRepository::class)
 
     factory { SearchInteractor(get()) }
     factory { AlbumsInteractor(get()) }

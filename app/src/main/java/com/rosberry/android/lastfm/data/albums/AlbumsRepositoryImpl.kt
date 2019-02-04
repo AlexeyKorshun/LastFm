@@ -17,17 +17,25 @@ import kotlinx.coroutines.Deferred
  * @author Alexei Korshun on 03/02/2019.
  */
 class AlbumsRepositoryImpl(
-        private val api: LastFmApi
+        private val api: LastFmApi,
+        private val localManager: LocalManager
 ) : AlbumsRepository {
 
-    private val favoritesAlbums: MutableMap<String, DetailAlbum> = mutableMapOf()
+    private val favoritesAlbums: MutableMap<String, DetailAlbum> = localManager.restore()
+        .asSequence()
+        .map { createAlbumKey(it.artistName, it.name) to it }
+        .toMutableMap()
 
     override fun getTopAlbums(artistName: String): Deferred<List<Album>> {
         return api.getTopAlbums(artistName)
     }
 
     override fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum> {
-        return api.getAlbumDetails(artistName, albumName)
+        return if (favoritesAlbums.containsKey(createAlbumKey(artistName, albumName))) {
+            val deferred = CompletableDeferred<DetailAlbum>()
+            deferred.complete(favoritesAlbums[createAlbumKey(artistName, albumName)]!!)
+            deferred
+        } else api.getAlbumDetails(artistName, albumName)
     }
 
     override fun getFavoritesAlbum(): Deferred<List<DetailAlbum>> {
@@ -38,15 +46,23 @@ class AlbumsRepositoryImpl(
 
     override fun isFavoriteAlbum(artistName: String, albumName: String): Deferred<Boolean> {
         val deferred = CompletableDeferred<Boolean>()
-        deferred.complete(favoritesAlbums.containsKey("$artistName-$albumName"))
+        deferred.complete(favoritesAlbums.containsKey(createAlbumKey(artistName, albumName)))
         return deferred
     }
 
     override fun addAlbumToFavorites(album: DetailAlbum) {
-        favoritesAlbums["${album.artistName}-${album.name}"] = album
+        favoritesAlbums[createAlbumKey(album.artistName, album.name)] = album
+        localManager.store(favoritesAlbums.values)
     }
 
     override fun removeAlbumFromFavorites(album: DetailAlbum) {
-        favoritesAlbums.remove("${album.artistName}-${album.name}")
+        favoritesAlbums.remove(createAlbumKey(album.artistName, album.name))
+        localManager.store(favoritesAlbums.values)
     }
+
+    private fun createAlbumKey(artistName: String, albumName: String): String {
+        return "$artistName-$albumName"
+    }
+
+    private fun <K, V> Sequence<Pair<K, V>>.toMutableMap(): MutableMap<K, V> = toMap(LinkedHashMap())
 }
