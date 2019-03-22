@@ -22,7 +22,7 @@ class TopAlbumsPresenter(
         private val router: AppRouter,
         private val albumsInteractor: AlbumsInteractor,
         private val artistName: String
-) : MVPPresenter() {
+) : MVPPresenter(), TopAlbumItemView {
 
     @MVPIncludeToState
     val isLoading = ObservableBoolean(false)
@@ -40,8 +40,8 @@ class TopAlbumsPresenter(
         }
     }
 
-    fun click(item: Album) {
-        router.navigateTo(Screens.AlbumDetailScreen(artistName, item.name))
+    override fun click(album: Album) {
+        router.navigateTo(Screens.AlbumDetailScreen(artistName, album.name))
     }
 
     private fun loadData() {

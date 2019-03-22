@@ -21,6 +21,7 @@
             android:layout_height="56dp"
             android:contentDescription="@string/artist_image"
             android:scaleType="centerCrop"
+            app:imageUrl="@{item.image}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
