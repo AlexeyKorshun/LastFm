@@ -26,8 +26,10 @@ class AlbumsRepositoryImpl(
         .map { createAlbumKey(it.artistName, it.name) to it }
         .toMutableMap()
 
-    override fun getTopAlbums(artistName: String): Deferred<List<Album>> {
-        return api.getTopAlbums(artistName)
+    override fun getTopAlbums(artistName: String): List<Album> {
+        val response = api.getTopAlbums(artistName).execute()
+        if (response.isSuccessful) return response.body() ?: emptyList()
+        else throw RuntimeException()
     }
 
     override fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum> {

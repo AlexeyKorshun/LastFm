@@ -15,7 +15,7 @@ import kotlinx.coroutines.Deferred
  */
 interface AlbumsRepository {
 
-    fun getTopAlbums(artistName: String): Deferred<List<Album>>
+    fun getTopAlbums(artistName: String): List<Album>
 
     fun getDetailAlbum(albumName: String, artistName: String): Deferred<DetailAlbum>
 
