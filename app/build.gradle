@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.rosberry.android.lastfm"
         minSdkVersion 21
@@ -46,5 +47,5 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2'
 
-    implementation 'de.appsfactory:mvp:3.5.0'
+    implementation 'de.appsfactory:mvp:3.5.2-androidx'
 }
